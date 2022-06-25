@@ -16,13 +16,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/hello", "/login/**").hasAnyRole("ADMIN", "USER").antMatchers("/")
-				.permitAll();
+
+		http.csrf().disable().authorizeRequests().antMatchers("/hello", "/login").hasAnyRole("ADMIN", "USER").and()
+				.authorizeRequests().antMatchers("/").permitAll().and().httpBasic();
 	}
 
 	@Bean
 	@Override
 	public UserDetailsService userDetailsService() {
+
 		UserDetails user = User.withDefaultPasswordEncoder().username("ankita").password("user").roles("USER").build();
 
 		UserDetails adminUser = User.withDefaultPasswordEncoder().username("ad@admin").password("admin").roles("ADMIN")
